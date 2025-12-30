@@ -132,8 +132,8 @@
       color: var(--muted);
     }
 
-    /* Slots */
-    .slots {
+    /* s */
+    .s {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
@@ -154,7 +154,7 @@
       margin-bottom: 8px;
     }
 
-    .slot-card label {
+    .-card label {
       display: flex;
       gap: 10px;
       font-weight: 600;
@@ -162,7 +162,7 @@
       margin-top: 6px;
     }
 
-    .slot-card input {
+    .-card input {
       width: auto;
     }
 
@@ -219,7 +219,7 @@
           action="/?submitted=true">
 
       <input type="hidden" name="form-name" value="interview-availability">
-      <input type="hidden" id="slot_check" name="slot_check">
+      
 
       <div class="grid">
 
@@ -268,8 +268,8 @@
 <script>
   const mw = document.getElementById('mw');
   const cmw = document.getElementById('cmw');
-  const slots = document.querySelectorAll('.slot');
-  const slotCheck = document.getElementById('slot_check');
+  
+  
 
   function validateForm(e) {
     if (mw.value !== cmw.value) {
@@ -278,14 +278,7 @@
       return;
     }
 
-    const anySlot = Array.from(slots).some(s => s.checked);
-    if (!anySlot) {
-      e.preventDefault();
-      alert('Please select at least one interview slot');
-      return;
-    }
-
-    slotCheck.value = 'selected';
+  
   }
 
   document.querySelector('form').addEventListener('submit', validateForm);
@@ -293,6 +286,7 @@
 
 </body>
 </html>
+
 
 
 
