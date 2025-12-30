@@ -229,10 +229,86 @@
             <input id="email" type="email" name="email" placeholder="Enter your email" required>
           </div>
 
-          <div class="field full">
-            <label for="availability">Your availability</label>
-            <textarea id="availability" name="availability" placeholder="e.g. Mon–Wed 10:00–14:00 GMT" required></textarea>
-          </div>
+        <div class="field full">
+  <label>Available interview slots (tick all that work for you)</label>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
+    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
+      <div style="font-weight:750; margin-bottom:8px;">6 January</div>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
+        <input type="checkbox" name="slot_6_jan_9_11" value="6 Jan 9am–11am" style="width:auto; margin-top:2px;">
+        9am – 11am
+      </label>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
+        <input type="checkbox" name="slot_6_jan_2_3" value="6 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
+        2pm – 3pm
+      </label>
+    </div>
+
+    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
+      <div style="font-weight:750; margin-bottom:8px;">7 January</div>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
+        <input type="checkbox" name="slot_7_jan_9_11" value="7 Jan 9am–11am" style="width:auto; margin-top:2px;">
+        9am – 11am
+      </label>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
+        <input type="checkbox" name="slot_7_jan_2_3" value="7 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
+        2pm – 3pm
+      </label>
+    </div>
+
+    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
+      <div style="font-weight:750; margin-bottom:8px;">8 January</div>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
+        <input type="checkbox" name="slot_8_jan_9_11" value="8 Jan 9am–11am" style="width:auto; margin-top:2px;">
+        9am – 11am
+      </label>
+
+      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
+        <input type="checkbox" name="slot_8_jan_2_3" value="8 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
+        2pm – 3pm
+      </label>
+    </div>
+  </div>
+
+  <div class="help" style="margin-top:10px;">
+    Please tick all slots you can attend. We’ll confirm one time by email.
+  </div>
+
+  <!-- simple required marker so they must pick at least one -->
+  <input type="hidden" name="at_least_one_slot" id="at_least_one_slot" value="">
+</div>
+
+<script>
+  // Require at least one slot to be selected (client-side)
+  (function () {
+    const form = document.querySelector('form[name="interview-availability"]');
+    if (!form) return;
+
+    const slotBoxes = form.querySelectorAll('input[type="checkbox"][name^="slot_"]');
+    const marker = document.getElementById('at_least_one_slot');
+
+    const update = () => {
+      const anyChecked = Array.from(slotBoxes).some(cb => cb.checked);
+      marker.value = anyChecked ? 'yes' : '';
+    };
+
+    slotBoxes.forEach(cb => cb.addEventListener('change', update));
+    form.addEventListener('submit', (e) => {
+      update();
+      if (!marker.value) {
+        e.preventDefault();
+        alert('Please tick at least one available time slot.');
+      }
+    });
+  })();
+</script>
+
 
           <div class="field">
             <label for="timezone">Timezone</label>
@@ -269,3 +345,4 @@
   </main>
 </body>
 </html>
+
