@@ -140,6 +140,53 @@
       font-weight: 800;
       cursor: pointer;
     }
+
+    /* Memorable word checklist */
+    .checklist {
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f9fafb;
+      display: none; /* stays hidden until click */
+    }
+
+    .checklist-title{
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .checklist ul{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .rule {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #d1d5db; /* neutral */
+      flex: 0 0 auto;
+    }
+
+    .rule.ok { color: #065f46; }
+    .rule.ok .dot { background: #10b981; }
+
+    .rule.bad { color: #991b1b; }
+    .rule.bad .dot { background: #ef4444; }
   </style>
 </head>
 
@@ -162,14 +209,16 @@
       Please register your details so we can confirm your interview.
     </p>
 
-    <!-- ✅ CORRECT FORMSPREE ENDPOINT -->
- <form
+    <form
   action="https://formspree.io/f/mykyawdj"
   method="POST"
 >
+
       <input type="hidden" name="_subject" value="New Candidate Registration">
       <input type="hidden" name="_template" value="table">
+      <!-- If you have a real thanks.html on your site, you can use this instead:
       <input type="hidden" name="_redirect" value="/thanks.html">
+      -->
 
       <div class="grid">
 
@@ -200,9 +249,20 @@
                  name="memorable_word"
                  placeholder="Minimum 8 characters, 1 special character"
                  minlength="8"
+                 autocomplete="new-password"
                  required>
           <div class="help">
             Used only to verify your identity during scheduling.
+          </div>
+
+          <!-- Checklist (hidden until click) -->
+          <div class="checklist" id="mwChecklist">
+            <div class="checklist-title">Memorable word requirements</div>
+            <ul>
+              <li class="rule" id="rLen"><span class="dot"></span> At least 8 characters</li>
+              <li class="rule" id="rSpec"><span class="dot"></span> Contains 1 special character</li>
+              <li class="rule" id="rMatch"><span class="dot"></span> Matches confirmation</li>
+            </ul>
           </div>
         </div>
 
@@ -211,6 +271,7 @@
           <input type="password"
                  id="cmw"
                  placeholder="Must match"
+                 autocomplete="new-password"
                  required>
         </div>
 
@@ -224,17 +285,63 @@
 </main>
 
 <script>
+  const form = document.getElementById('regForm');
   const mw = document.getElementById('mw');
   const cmw = document.getElementById('cmw');
 
-  document.querySelector('form').addEventListener('submit', function(e) {
-    if (mw.value !== cmw.value) {
+  const checklist = document.getElementById('mwChecklist');
+  const rLen = document.getElementById('rLen');
+  const rSpec = document.getElementById('rSpec');
+  const rMatch = document.getElementById('rMatch');
+
+  function setRule(el, ok, touched) {
+    el.classList.remove('ok','bad');
+    if (!touched) return; // keep neutral until user interacts
+    el.classList.add(ok ? 'ok' : 'bad');
+  }
+
+  function hasSpecial(str) {
+    // anything not a letter/number counts as special
+    return /[^a-zA-Z0-9]/.test(str);
+  }
+
+  let touched = false;
+
+  function updateChecklist() {
+    const v = mw.value || '';
+    const c = cmw.value || '';
+
+    setRule(rLen, v.length >= 8, touched);
+    setRule(rSpec, hasSpecial(v), touched);
+    setRule(rMatch, v.length > 0 && v === c, touched);
+  }
+
+  // show checklist only when user focuses/clicks memorable word
+  mw.addEventListener('focus', () => {
+    checklist.style.display = 'block';
+    touched = true;
+    updateChecklist();
+  });
+
+  mw.addEventListener('input', () => { touched = true; updateChecklist(); });
+  cmw.addEventListener('input', () => { touched = true; updateChecklist(); });
+
+  form.addEventListener('submit', function(e) {
+    const v = mw.value || '';
+    const valid = (v.length >= 8) && hasSpecial(v) && (mw.value === cmw.value);
+
+    if (!valid) {
       e.preventDefault();
-      alert('Memorable words do not match');
+      touched = true;
+      updateChecklist();
+
+      if (mw.value !== cmw.value) return alert('Memorable words do not match');
+      if (v.length < 8) return alert('Memorable word must be at least 8 characters');
+      if (!hasSpecial(v)) return alert('Memorable word must include 1 special character');
+      return alert('Please check your memorable word requirements');
     }
   });
 </script>
 
 </body>
 </html>
-
