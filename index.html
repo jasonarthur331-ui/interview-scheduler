@@ -1,103 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interview Availability</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f6f7f9;
-      padding: 40px;
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --primary:#2563eb;
+      --banner:#b7c84b; /* change this if you want a different banner colour */
     }
-    .card {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 8px;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
+      color:var(--text);
     }
-    label {
-      display: block;
-      margin-top: 15px;
+
+    /* Top banner */
+    .banner{
+      background:var(--banner);
+      color:#fff;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
-    input, textarea, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+    .logo{
+      width:34px;
+      height:34px;
+      border-radius:10px;
+      background:rgba(255,255,255,.25);
+      display:grid;
+      place-items:center;
+      font-weight:700;
+      letter-spacing:.5px;
     }
-    button {
-      margin-top: 20px;
-      background: #1a73e8;
-      color: white;
-      border: none;
-      cursor: pointer;
+    .banner-title{
+      font-size:18px;
+      font-weight:700;
+    }
+    .banner-sub{
+      font-size:13px;
+      opacity:.9;
+      margin-top:2px;
+    }
+    .banner-text{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+
+    /* Page container */
+    .wrap{
+      max-width: 880px;
+      margin: 28px auto;
+      padding: 0 16px;
+    }
+
+    /* Card */
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 10px 25px rgba(17,24,39,.06);
+      padding: 26px;
+    }
+    .card h1{
+      margin:0 0 6px 0;
+      font-size:26px;
+      font-weight:750;
+      letter-spacing:-.02em;
+    }
+    .underline{
+      width:46px;
+      height:4px;
+      background:var(--primary);
+      border-radius:999px;
+      margin:10px 0 18px;
+      opacity:.85;
+    }
+    .subtext{
+      margin:0 0 18px 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    /* Form layout */
+    form{
+      margin-top: 8px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:650;
+      color:#111827;
+      margin: 0 0 8px 0;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    input, textarea, select{
+      width:100%;
+      padding: 12px 12px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+      transition: border .15s ease, box-shadow .15s ease;
+    }
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(37,99,235,.6);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+    }
+    textarea{
+      min-height: 110px;
+      resize: vertical;
+    }
+    .help{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      margin-top:-2px;
+    }
+
+    .full{
+      grid-column: 1 / -1;
+    }
+
+    /* Consent */
+    .consent{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-top: 6px;
+      padding-top: 6px;
+    }
+    .consent input{
+      width:auto;
+      margin-top:2px;
+    }
+    .consent label{
+      margin:0;
+      font-weight:600;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    /* Submit */
+    .actions{
+      margin-top:18px;
+    }
+    button{
+      width:100%;
+      border:0;
+      padding: 13px 14px;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:750;
+      cursor:pointer;
+      color:#fff;
+      background: linear-gradient(90deg, #3b82f6, #7c3aed);
+      box-shadow: 0 10px 20px rgba(59,130,246,.18);
+      transition: transform .06s ease;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .footer-note{
+      margin-top: 14px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
     }
   </style>
 </head>
+
 <body>
+  <header class="banner">
+    <div class="logo">ATS</div>
+    <div class="banner-text">
+      <div class="banner-title">Interview Scheduling</div>
+      <div class="banner-sub">Availability confirmation for shortlisted candidates</div>
+    </div>
+  </header>
 
-  <div class="card">
-    <h2>Interview Availability</h2>
-    <p>Please let us know when you are available for interview.</p>
+  <main class="wrap">
+    <section class="card">
+      <h1>Interview Availability</h1>
+      <div class="underline"></div>
+      <p class="subtext">
+        Please confirm your contact details and provide your availability. We’ll use this to arrange an interview time.
+      </p>
 
-   <form name="interview-availability"
-      method="POST"
-      data-netlify="true"
-      action="/?submitted=true">
+      <form name="interview-availability"
+            method="POST"
+            data-netlify="true"
+            action="/?submitted=true">
 
-        
+        <!-- Netlify required hidden field -->
+        <input type="hidden" name="form-name" value="interview-availability">
 
-      <input type="hidden" name="form-name" value="interview-availability">
+        <div class="grid">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input id="name" type="text" name="name" placeholder="Enter your full name" required>
+          </div>
 
-      <label>
-        Full name
-        <input type="text" name="name" required>
-      </label>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" name="email" placeholder="Enter your email" required>
+          </div>
 
-      <label>
-        Email address
-        <input type="email" name="email" required>
-      </label>
+          <div class="field full">
+            <label for="availability">Your availability</label>
+            <textarea id="availability" name="availability" placeholder="e.g. Mon–Wed 10:00–14:00 GMT" required></textarea>
+          </div>
 
-      <label>
-        Your availability
-        <textarea name="availability" required
-          placeholder="e.g. Mon–Wed 10:00–14:00 GMT"></textarea>
-      </label>
+          <div class="field">
+            <label for="timezone">Timezone</label>
+            <select id="timezone" name="timezone" required>
+              <option value="">Select</option>
+              <option>GMT</option>
+              <option>GMT+1</option>
+              <option>GMT-5</option>
+            </select>
+          </div>
 
-      <label>
-        Timezone
-        <select name="timezone" required>
-          <option value="">Select</option>
-          <option>GMT</option>
-          <option>GMT+1</option>
-          <option>GMT-5</option>
-        </select>
-      </label>
+          <div class="field">
+            <label for="memorable_word">Memorable word</label>
+            <input id="memorable_word"
+                   type="password"
+                   name="memorable_word"
+                   placeholder="Enter a word you’ll remember"
+                   required>
+            <div class="help">Used to verify your identity when confirming interview details.</div>
+          </div>
 
-<label>
-  Password
-  <input type="password"
-         name="memorable_word"
-         required
-         placeholder="Minimum 8 characters & 1 special character">
-</label>
+          <div class="consent full">
+            <input id="consent" type="checkbox" name="consent" required>
+            <label for="consent">I consent to my data being used for interview scheduling.</label>
+          </div>
+        </div>
 
-     
-      <label>
-        <input type="checkbox" name="consent" required>
-        I consent to my data being used for interview scheduling
-      </label>
-
-      <button type="submit">Submit availability</button>
-    </form>
-  </div>
-
+        <div class="actions">
+          <button type="submit">Submit availability</button>
+          <div class="footer-note">If you have any issues submitting this form, reply to the email you received.</div>
+        </div>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
-
-
-
-
