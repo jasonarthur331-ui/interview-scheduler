@@ -1,348 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Interview Availability</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    :root{
+    :root {
       --bg:#f5f7fb;
       --card:#ffffff;
       --text:#111827;
       --muted:#6b7280;
       --border:#e5e7eb;
       --primary:#2563eb;
-      --banner:#b7c84b; /* change this if you want a different banner colour */
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:var(--bg);
-      color:var(--text);
+      --banner:#b7c84b;
     }
 
-    /* Top banner */
-    .banner{
-      background:var(--banner);
-      color:#fff;
-      padding:18px 22px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-    .logo{
-      width:34px;
-      height:34px;
-      border-radius:10px;
-      background:rgba(255,255,255,.25);
-      display:grid;
-      place-items:center;
-      font-weight:700;
-      letter-spacing:.5px;
-    }
-    .banner-title{
-      font-size:18px;
-      font-weight:700;
-    }
-    .banner-sub{
-      font-size:13px;
-      opacity:.9;
-      margin-top:2px;
-    }
-    .banner-text{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--text);
     }
 
-    /* Page container */
-    .wrap{
-      max-width: 880px;
-      margin: 28px auto;
+    /* Banner */
+    .banner {
+      background: var(--banner);
+      color: #fff;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.25);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .banner-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .banner-sub {
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    /* Layout */
+    .wrap {
+      max-width: 900px;
+      margin: 30px auto;
       padding: 0 16px;
     }
 
-    /* Card */
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(17,24,39,.06);
-      padding: 26px;
-    }
-    .card h1{
-      margin:0 0 6px 0;
-      font-size:26px;
-      font-weight:750;
-      letter-spacing:-.02em;
-    }
-    .underline{
-      width:46px;
-      height:4px;
-      background:var(--primary);
-      border-radius:999px;
-      margin:10px 0 18px;
-      opacity:.85;
-    }
-    .subtext{
-      margin:0 0 18px 0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.4;
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.06);
     }
 
-    /* Form layout */
-    form{
-      margin-top: 8px;
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
     }
-    .grid{
-      display:grid;
+
+    .underline {
+      width: 48px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 999px;
+      margin: 10px 0 18px;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    /* Form */
+    .grid {
+      display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-    @media (max-width: 720px){
-      .grid{ grid-template-columns: 1fr; }
+
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
     }
 
-    label{
-      display:block;
-      font-size:13px;
-      font-weight:650;
-      color:#111827;
-      margin: 0 0 8px 0;
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
+
+    .full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
     }
-    input, textarea, select{
-      width:100%;
-      padding: 12px 12px;
-      border:1px solid var(--border);
-      border-radius:10px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-      transition: border .15s ease, box-shadow .15s ease;
+
+    input, select {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
     }
-    input:focus, textarea:focus, select:focus{
-      border-color: rgba(37,99,235,.6);
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(37,99,235,.12);
     }
-    textarea{
-      min-height: 110px;
-      resize: vertical;
-    }
-    .help{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
-      margin-top:-2px;
+
+    .help {
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    .full{
-      grid-column: 1 / -1;
+    /* Slots */
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 720px) {
+      .slots { grid-template-columns: 1fr; }
+    }
+
+    .slot-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .slot-title {
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .slot-card label {
+      display: flex;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .slot-card input {
+      width: auto;
     }
 
     /* Consent */
-    .consent{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      margin-top: 6px;
-      padding-top: 6px;
+    .consent {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
-    .consent input{
-      width:auto;
-      margin-top:2px;
-    }
-    .consent label{
-      margin:0;
-      font-weight:600;
-      color:var(--muted);
-      line-height:1.35;
+
+    .consent input {
+      width: auto;
+      margin-top: 3px;
     }
 
     /* Submit */
-    .actions{
-      margin-top:18px;
-    }
-    button{
-      width:100%;
-      border:0;
-      padding: 13px 14px;
-      border-radius:12px;
-      font-size:15px;
-      font-weight:750;
-      cursor:pointer;
-      color:#fff;
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
       background: linear-gradient(90deg, #3b82f6, #7c3aed);
-      box-shadow: 0 10px 20px rgba(59,130,246,.18);
-      transition: transform .06s ease;
-    }
-    button:active{ transform: translateY(1px); }
-
-    .footer-note{
-      margin-top: 14px;
-      color:var(--muted);
-      font-size:12px;
-      text-align:center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <header class="banner">
-    <div class="logo">ATS</div>
-    <div class="banner-text">
-      <div class="banner-title">Interview Scheduling</div>
-      <div class="banner-sub">Availability confirmation for shortlisted candidates</div>
-    </div>
-  </header>
 
-  <main class="wrap">
-    <section class="card">
-      <h1>Interview Availability</h1>
-      <div class="underline"></div>
-      <p class="subtext">
-        Please confirm your contact details and provide your availability. We’ll use this to arrange an interview time.
-      </p>
+<header class="banner">
+  <div class="logo">ATS</div>
+  <div>
+    <div class="banner-title">Interview Scheduling</div>
+    <div class="banner-sub">Availability confirmation</div>
+  </div>
+</header>
 
-      <form name="interview-availability"
-            method="POST"
-            data-netlify="true"
-            action="/?submitted=true">
+<main class="wrap">
+  <section class="card">
 
-        <!-- Netlify required hidden field -->
-        <input type="hidden" name="form-name" value="interview-availability">
+    <h1>Interview Availability</h1>
+    <div class="underline"></div>
+    <p class="subtext">
+      Please confirm your details and select all interview times you are available for.
+    </p>
 
-        <div class="grid">
-          <div class="field">
-            <label for="name">Full name</label>
-            <input id="name" type="text" name="name" placeholder="Enter your full name" required>
-          </div>
+    <form name="interview-availability"
+          method="POST"
+          data-netlify="true"
+          action="/?submitted=true">
 
-          <div class="field">
-            <label for="email">Email address</label>
-            <input id="email" type="email" name="email" placeholder="Enter your email" required>
-          </div>
+      <input type="hidden" name="form-name" value="interview-availability">
+      <input type="hidden" id="slot_check" name="slot_check">
+
+      <div class="grid">
+
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
+        </div>
+
+        <div class="field">
+          <label>Surname</label>
+          <input type="text" name="surname" required>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" required>
+        </div>
+
+        <div class="field">
+          <label>Memorable word</label>
+          <input type="password" id="mw" name="memorable_word" required>
+        </div>
+
+        <div class="field">
+          <label>Confirm memorable word</label>
+          <input type="password" id="cmw" required>
+        </div>
 
         <div class="field full">
-  <label>Available interview slots (tick all that work for you)</label>
+          <label>Available interview slots</label>
 
-  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
-    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
-      <div style="font-weight:750; margin-bottom:8px;">6 January</div>
+          <div class="slots">
+            <div class="slot-card">
+              <div class="slot-title">6 January</div>
+              <label><input type="checkbox" class="slot">9am – 11am</label>
+              <label><input type="checkbox" class="slot">2pm – 3pm</label>
+            </div>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
-        <input type="checkbox" name="slot_6_jan_9_11" value="6 Jan 9am–11am" style="width:auto; margin-top:2px;">
-        9am – 11am
-      </label>
+            <div class="slot-card">
+              <div class="slot-title">7 January</div>
+              <label><input type="checkbox" class="slot">9am – 11am</label>
+              <label><input type="checkbox" class="slot">2pm – 3pm</label>
+            </div>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
-        <input type="checkbox" name="slot_6_jan_2_3" value="6 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
-        2pm – 3pm
-      </label>
-    </div>
+            <div class="slot-card">
+              <div class="slot-title">8 January</div>
+              <label><input type="checkbox" class="slot">9am – 11am</label>
+              <label><input type="checkbox" class="slot">2pm – 3pm</label>
+            </div>
+          </div>
 
-    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
-      <div style="font-weight:750; margin-bottom:8px;">7 January</div>
+          <div class="help">Please tick all times you can attend.</div>
+        </div>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
-        <input type="checkbox" name="slot_7_jan_9_11" value="7 Jan 9am–11am" style="width:auto; margin-top:2px;">
-        9am – 11am
-      </label>
+        <div class="consent full">
+          <input type="checkbox" required>
+          <label>I consent to my data being used for interview scheduling.</label>
+        </div>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
-        <input type="checkbox" name="slot_7_jan_2_3" value="7 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
-        2pm – 3pm
-      </label>
-    </div>
+      </div>
 
-    <div style="border:1px solid var(--border); border-radius:12px; padding:12px;">
-      <div style="font-weight:750; margin-bottom:8px;">8 January</div>
+      <button type="submit">Submit availability</button>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted);">
-        <input type="checkbox" name="slot_8_jan_9_11" value="8 Jan 9am–11am" style="width:auto; margin-top:2px;">
-        9am – 11am
-      </label>
+    </form>
 
-      <label style="display:flex; gap:10px; align-items:flex-start; font-weight:600; color:var(--muted); margin-top:8px;">
-        <input type="checkbox" name="slot_8_jan_2_3" value="8 Jan 2pm–3pm" style="width:auto; margin-top:2px;">
-        2pm – 3pm
-      </label>
-    </div>
-  </div>
-
-  <div class="help" style="margin-top:10px;">
-    Please tick all slots you can attend. We’ll confirm one time by email.
-  </div>
-
-  <!-- simple required marker so they must pick at least one -->
-  <input type="hidden" name="at_least_one_slot" id="at_least_one_slot" value="">
-</div>
+  </section>
+</main>
 
 <script>
-  // Require at least one slot to be selected (client-side)
-  (function () {
-    const form = document.querySelector('form[name="interview-availability"]');
-    if (!form) return;
+  const mw = document.getElementById('mw');
+  const cmw = document.getElementById('cmw');
+  const slots = document.querySelectorAll('.slot');
+  const slotCheck = document.getElementById('slot_check');
 
-    const slotBoxes = form.querySelectorAll('input[type="checkbox"][name^="slot_"]');
-    const marker = document.getElementById('at_least_one_slot');
+  function validateForm(e) {
+    if (mw.value !== cmw.value) {
+      e.preventDefault();
+      alert('Memorable words do not match');
+      return;
+    }
 
-    const update = () => {
-      const anyChecked = Array.from(slotBoxes).some(cb => cb.checked);
-      marker.value = anyChecked ? 'yes' : '';
-    };
+    const anySlot = Array.from(slots).some(s => s.checked);
+    if (!anySlot) {
+      e.preventDefault();
+      alert('Please select at least one interview slot');
+      return;
+    }
 
-    slotBoxes.forEach(cb => cb.addEventListener('change', update));
-    form.addEventListener('submit', (e) => {
-      update();
-      if (!marker.value) {
-        e.preventDefault();
-        alert('Please tick at least one available time slot.');
-      }
-    });
-  })();
+    slotCheck.value = 'selected';
+  }
+
+  document.querySelector('form').addEventListener('submit', validateForm);
 </script>
 
-
-          <div class="field">
-            <label for="timezone">Timezone</label>
-            <select id="timezone" name="timezone" required>
-              <option value="">Select</option>
-              <option>GMT</option>
-              <option>GMT+1</option>
-              <option>GMT-5</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="memorable_word">Memorable word</label>
-            <input id="memorable_word"
-                   type="password"
-                   name="memorable_word"
-                   placeholder="Enter a word you’ll remember"
-                   required>
-            <div class="help">Used to verify your identity when confirming interview details.</div>
-          </div>
-
-          <div class="consent full">
-            <input id="consent" type="checkbox" name="consent" required>
-            <label for="consent">I consent to my data being used for interview scheduling.</label>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="submit">Submit availability</button>
-          <div class="footer-note">If you have any issues submitting this form, reply to the email you received.</div>
-        </div>
-      </form>
-    </section>
-  </main>
 </body>
 </html>
-
