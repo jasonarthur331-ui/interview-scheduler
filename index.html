@@ -308,7 +308,7 @@
           </div>
 
           <div class="field">
-            <label>Memorable word</label>
+            <label>Password</label>
             <input
               type="password"
               id="mw"
@@ -333,7 +333,7 @@
           </div>
 
           <div class="field">
-            <label>Confirm memorable word</label>
+            <label>Confirm Password</label>
             <input
               type="password"
               id="cmw"
@@ -341,7 +341,8 @@
               autocomplete="new-password"
               required
             />
-            <div class="help">Must match your memorable word.</div>
+            <div class="help">Must match your
+              Password.</div>
           </div>
 
           <!-- Terms + confirmations -->
@@ -367,26 +368,7 @@
                 <span>I confirm that I have made no payments to JDB Euro Group or to any 3rd party in order to gain a work placement with JDB Euro Group.</span>
               </label>
 
-              <label class="check-row">
-                <input type="checkbox" name="tc_data_share" required>
-                <span>I authorise JDB Euro Group to share my personal data for the purpose of work finding activities.</span>
-              </label>
-
-              <label class="check-row">
-                <input type="checkbox" name="tc_third_parties" required>
-                <span>JDB Euro Group may also share this data with carefully selected 3rd parties that JDB Euro Group believe may be of benefit to me.</span>
-              </label>
-
-              <label class="check-row">
-                <input type="checkbox" name="tc_data_retention" required>
-                <span>I authorise JDB Euro Group to retain my personal details for work finding activities.</span>
-              </label>
-
-              <label class="check-row">
-                <input type="checkbox" name="tc_opt_out" required>
-                <span>I understand I can opt out of being contacted by logging into My Account and changing my notification preferences.</span>
-              </label>
-
+            
               <label class="check-row" style="font-weight:800;">
                 <input type="checkbox" name="tc_accept_all" required>
                 <span>I accept the above and the terms and conditions.</span>
@@ -443,7 +425,7 @@
     form.addEventListener('submit', function(e) {
       if (mw.value !== cmw.value) {
         e.preventDefault();
-        alert('Memorable words do not match');
+        alert('Passwords do not match');
         return;
       }
 
@@ -459,9 +441,10 @@
         e.preventDefault();
         checklist.style.display = 'block';
         checkPw();
-        alert('Your memorable word must meet all requirements shown.');
+        alert('Your Password must meet all requirements shown.');
       }
     });
   </script>
 </body>
 </html>
+
